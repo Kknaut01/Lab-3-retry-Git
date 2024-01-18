@@ -63,15 +63,45 @@ nobel_living <- nobel %>%
   filter(gender != "org") %>%
   filter(!is.na(country)) %>% #filter(country != 'NA') %>%
   filter(is.na(died_date))
-
                       
-#Watched a video on the channel Mike Jonas Econometricts to try to figure this out, it kinda 
-#helped but the biggest problem is still filtering out dead winners. When I try to filter for 
-#died_date = NA, no matter whether I use quotations, single quotes, or any attempt to use the NA 
-#value, it always leaves me with zero observations, which tells me it doesnt like the syntax that
-#Im trying to use to say there is no value for died_date
+#After difficulties removing null values by specifying 
+#the value NA, I found a source on Edureka that helped 
+#me find good commands with the dplyr filter function
   
-#glimpse(nobel_living4)
+glimpse(nobel_living)
+```
+
+    ## Rows: 228
+    ## Columns: 26
+    ## $ id                    <dbl> 68, 69, 95, 97, 98, 99, 101, 103, 106, 107, 111,…
+    ## $ firstname             <chr> "Chen Ning", "Tsung-Dao", "Leon N.", "Leo", "Iva…
+    ## $ surname               <chr> "Yang", "Lee", "Cooper", "Esaki", "Giaever", "Jo…
+    ## $ year                  <dbl> 1957, 1957, 1972, 1973, 1973, 1973, 1974, 1975, …
+    ## $ category              <chr> "Physics", "Physics", "Physics", "Physics", "Phy…
+    ## $ affiliation           <chr> "Institute for Advanced Study", "Columbia Univer…
+    ## $ city                  <chr> "Princeton NJ", "New York NY", "Providence RI", …
+    ## $ country               <chr> "USA", "USA", "USA", "USA", "USA", "United Kingd…
+    ## $ born_date             <date> 1922-09-22, 1926-11-24, 1930-02-28, 1925-03-12,…
+    ## $ died_date             <date> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA,…
+    ## $ gender                <chr> "male", "male", "male", "male", "male", "male", …
+    ## $ born_city             <chr> "Hofei Anhwei", "Shanghai", "New York NY", "Osak…
+    ## $ born_country          <chr> "China", "China", "USA", "Japan", "Norway", "Uni…
+    ## $ born_country_code     <chr> "CN", "CN", "US", "JP", "NO", "GB", "GB", "US", …
+    ## $ died_city             <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+    ## $ died_country          <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+    ## $ died_country_code     <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+    ## $ overall_motivation    <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+    ## $ share                 <dbl> 2, 2, 3, 4, 4, 2, 2, 3, 2, 3, 4, 4, 3, 3, 2, 1, …
+    ## $ motivation            <chr> "\"for their penetrating investigation of the so…
+    ## $ born_country_original <chr> "China", "China", "USA", "Japan", "Norway", "Uni…
+    ## $ born_city_original    <chr> "Hofei Anhwei", "Shanghai", "New York NY", "Osak…
+    ## $ died_country_original <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+    ## $ died_city_original    <chr> NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, NA, …
+    ## $ city_original         <chr> "Princeton NJ", "New York NY", "Providence RI", …
+    ## $ country_original      <chr> "USA", "USA", "USA", "USA", "USA", "United Kingd…
+
+``` r
+#This variable now has the proper amount of observations
 ```
 
 ### Exercise 3
@@ -114,11 +144,47 @@ nobel_living_science <- nobel_living %>%
 
 #ggplot(nobel_living_science, aes(x = born_country_us, fill = born_country_us)) + geom_bar() + coord_flip() + labs( x = "Nobel Prize Winners", y = "Country of Birth", title = "Birth Country of Nobel Prize Winners by category", fill = "Country of Birth") + facet_wrap(~ category)
 
-ggplot(nobel_living_science, aes(x = country_us, fill = born_country_us)) + geom_bar() + coord_flip() + labs( x = "Nobel Prize Winners", y = "Country", title = "Country of Nobel Prize Winners by category", fill = "Country of Birth") + facet_wrap(~ category)
+ggplot(nobel_living_science, aes(x = country_us, fill = born_country_us)) + geom_bar() + coord_flip() + labs( x = "Nobel Prize Winners Country of Residence", y = "Number of Prizes", title = "Country of Nobel Prize Winners by category", fill = "Country of Birth") + facet_wrap(~ category)
 ```
 
-![](lab-03_files/figure-gfm/born-in-the-USA-plus-vis-1.png)<!-- -->
-
-…
+![](lab-03_files/figure-gfm/born-in-the-USA-plus-vis-1.png)<!-- --> At a
+glance, these charts seem to reflect the findings of the Buzzfeed
+article. The amount of prize winners based in the US seems
+proportionally correct, as does the data regarding country of birth. So
+glad this finally works! …
 
 ### Exercise 7
+
+``` r
+nobel_Immigrants <- nobel %>% 
+  filter(gender != "org") %>%
+  filter(country == "USA") %>%
+  filter (born_country != "USA")
+
+nobel_Immigrants %>%
+  count(born_country, sort = TRUE)
+```
+
+    ## # A tibble: 37 × 2
+    ##    born_country       n
+    ##    <chr>          <int>
+    ##  1 United Kingdom    15
+    ##  2 Canada            12
+    ##  3 Germany           10
+    ##  4 China              6
+    ##  5 Poland             6
+    ##  6 France             5
+    ##  7 Italy              5
+    ##  8 Japan              5
+    ##  9 Austria            4
+    ## 10 Hungary            4
+    ## # ℹ 27 more rows
+
+``` r
+#Looked for more detail on the count function at https://dplyr.tidyverse.org/reference/count.html
+```
+
+Based on this analysis the country where most Nobel prize winners in the
+United States were born is the United Kingdom, with 15 Nobel laureates.
+There were 112 Nobel prize winners who immigrated to the United States
+from 37 different countries.

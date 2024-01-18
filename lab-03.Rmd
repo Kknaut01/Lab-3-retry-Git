@@ -37,15 +37,14 @@ nobel_living <- nobel %>%
   filter(gender != "org") %>%
   filter(!is.na(country)) %>% #filter(country != 'NA') %>%
   filter(is.na(died_date))
-
                       
-#Watched a video on the channel Mike Jonas Econometricts to try to figure this out, it kinda 
-#helped but the biggest problem is still filtering out dead winners. When I try to filter for 
-#died_date = NA, no matter whether I use quotations, single quotes, or any attempt to use the NA 
-#value, it always leaves me with zero observations, which tells me it doesnt like the syntax that
-#Im trying to use to say there is no value for died_date
+#After difficulties removing null values by specifying 
+#the value NA, I found a source on Edureka that helped 
+#me find good commands with the dplyr filter function
   
-#glimpse(nobel_living4)
+glimpse(nobel_living)
+
+#This variable now has the proper amount of observations
 ```
 
 
@@ -83,12 +82,22 @@ nobel_living_science <- nobel_living %>%
 
 #ggplot(nobel_living_science, aes(x = born_country_us, fill = born_country_us)) + geom_bar() + coord_flip() + labs( x = "Nobel Prize Winners", y = "Country of Birth", title = "Birth Country of Nobel Prize Winners by category", fill = "Country of Birth") + facet_wrap(~ category)
 
-ggplot(nobel_living_science, aes(x = country_us, fill = born_country_us)) + geom_bar() + coord_flip() + labs( x = "Nobel Prize Winners", y = "Country", title = "Country of Nobel Prize Winners by category", fill = "Country of Birth") + facet_wrap(~ category)
+ggplot(nobel_living_science, aes(x = country_us, fill = born_country_us)) + geom_bar() + coord_flip() + labs( x = "Nobel Prize Winners Country of Residence", y = "Number of Prizes", title = "Country of Nobel Prize Winners by category", fill = "Country of Birth") + facet_wrap(~ category)
 ```
-
+At a glance, these charts seem to reflect the findings of the Buzzfeed article. The amount of prize winners based in the US seems proportionally correct, as does the data regarding country of birth. So glad this finally works!
 ...
 
 ### Exercise 7
 ```{r freq}
+nobel_Immigrants <- nobel %>% 
+  filter(gender != "org") %>%
+  filter(country == "USA") %>%
+  filter (born_country != "USA")
 
+nobel_Immigrants %>%
+  count(born_country, sort = TRUE)
+
+#Looked for more detail on the count function at https://dplyr.tidyverse.org/reference/count.html
 ```
+
+Based on this analysis the country where most Nobel prize winners in the United States were born is the United Kingdom, with 15 Nobel laureates. There were 112 Nobel prize winners who immigrated to the United States from 37 different countries.
