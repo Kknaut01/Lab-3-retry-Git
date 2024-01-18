@@ -81,8 +81,11 @@ ggplot(nobel_living_science, aes(x = country_us, fill = country_us)) + geom_bar(
 nobel_living_science <- nobel_living %>%
   mutate(born_country_us = if_else(born_country == "USA", "USA", "Other")) 
 
-ggplot(nobel_living_science, aes(x = born_country_us, fill = born_country_us)) + geom_bar() + coord_flip() + labs( x = "Nobel Prize Winners", y = "Country of Birth", title = "Birth Country of Nobel Prize Winners by category", fill = "Country of Birth") + facet_wrap(~ category)
+#ggplot(nobel_living_science, aes(x = born_country_us, fill = born_country_us)) + geom_bar() + coord_flip() + labs( x = "Nobel Prize Winners", y = "Country of Birth", title = "Birth Country of Nobel Prize Winners by category", fill = "Country of Birth") + facet_wrap(~ category)
+
+ggplot(nobel_living_science, aes(x = country_us, fill = born_country_us)) + geom_bar() + coord_flip() + labs( x = "Nobel Prize Winners", y = "Country", title = "Country of Nobel Prize Winners by category", fill = "Country of Birth") + facet_wrap(~ category)
 ```
+
 ...
 
 ### Exercise 7
